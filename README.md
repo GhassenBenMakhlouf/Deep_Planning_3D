@@ -20,8 +20,11 @@ Each output matrix is a 101x101x101x4 Matrix (4 channels), where:
 * channel 2 --> data conductivity
 * channel 3 --> data labels: angles between x and y axes of the ground truth EMF gradients
 * channel 4 --> data labels: angles between the xy plan and z axis of the ground truth EMF gradients
+
 Use lines 12, 13 and 14 to set the paths of the Comsol output data for train, val and test.
+
 Use lines 25, 27 and 29 to set the conductivities of the environment, obstacles and goal respectively.
+
 PS: The Python script "preprocess_data.py" was written in Tensorflow 1.15 and not yet updated to 2.7.
 
 ### Train the 3D CNN
