@@ -1,5 +1,4 @@
 from sklearn.model_selection import train_test_split
-
 import tensorflow as tf
 import tensorflow_addons as tfa
 import random
@@ -18,6 +17,12 @@ from models import build_cnn_3d
 
 if __name__ == "__main__":
 
+    train_path = "./numpydata_training"
+    val_path = "./numpydata_validation"
+    test_path = "./numpydata_testing"
+    batch_size = 14
+    number_of_epochs = 10000
+
     physical_devices = tf.config.list_physical_devices("GPU")
     print("Num GPUs:", len(physical_devices))
 
@@ -26,11 +31,6 @@ if __name__ == "__main__":
     except:
         # Invalid device or cannot modify virtual devices once initialized.
         pass
-
-    train_path = "./numpydata_training"
-    val_path = "./numpydata_validation"
-    test_path = "./numpydata_testing"
-    batch_size = 14
 
     # X, Y = load_dataset(dataset_path=dataset_path)
     train_dataset = DP3dDataset(dataset_path=train_path, batch_size=batch_size)
@@ -95,8 +95,6 @@ if __name__ == "__main__":
         tensorboard_callback,
         cp_callback,
     ]
-
-    number_of_epochs = 10000
 
     random.seed(42)
     tf.random.set_seed(42)

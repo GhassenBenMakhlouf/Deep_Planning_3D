@@ -4,8 +4,9 @@ import com.comsol.model.util.*
 
 model_path = '/home/gbmakhlouf/data_comsol/';
 data_path = '/home/gbmakhlouf/data_comsol/data/';
+number_generated_data = 2000;
 
-for num_config = 1041:2000
+for num_config = 1:number_generated_data
     tic
     
     model = ModelUtil.create('Model');
@@ -250,7 +251,7 @@ for num_config = 1041:2000
     % model.result.export('plot1').run;
     % model.result.export('plot2').run;
     model.result.export('plot3').run;
-    % mphsave(model,'test.mph');
+    mphsave(model,'deep_planning_3d.mph');
 end
 
 

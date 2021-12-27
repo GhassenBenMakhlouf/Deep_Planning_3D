@@ -4,8 +4,6 @@ import cmath, math
 import timeit
 import numba
 import tensorflow.compat.v1 as tf
-
-# import profile
 import concurrent.futures
 import glob
 import sys
