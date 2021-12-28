@@ -2,9 +2,9 @@ import com.comsol.model.*
 import com.comsol.model.util.*
 
 
-model_path = '/home/gbmakhlouf/data_comsol/';
-data_path = '/home/gbmakhlouf/data_comsol/data/';
-number_generated_data = 2000;
+model_path = './';
+data_path = './data/';
+number_generated_data = 1;
 
 for num_config = 1:number_generated_data
     tic
@@ -13,16 +13,16 @@ for num_config = 1:number_generated_data
     
     model.modelPath(model_path);
     
-    model.label('model_3d.mph');
+    model.label('deep_planning_3d.mph');
     
     model.param.set('mu', '12.56e-7');
     model.param.set('sigmae', '100');
-    model.param.set('sigmag', '5.5e8');
+    model.param.set('sigmag', '1e6');
     model.param.set('sigmao', '0');
     model.param.set('w', '0.05');
-    model.param.set('ACe', '-mu*sigmae*w*i');
-    model.param.set('ACg', '-mu*sigmag*w');
-    model.param.set('ACo', '-mu*sigmao*w');
+    model.param.set('ACe', 'mu*sigmae*w*i');
+    model.param.set('ACg', 'mu*sigmag*w*i');
+    model.param.set('ACo', 'mu*sigmao*w*i');
     
     shape.block = 1; shape.cube = 2; shape.T = 3; shape.U = 4; shape.L = 5; shape.sphere = 6; shape.ellipsoid = 7;
     % 2D version: 
@@ -100,14 +100,14 @@ for num_config = 1:number_generated_data
     model.material('mat1').propertyGroup('def').func('an1').set('args', {'x' 'y' 'z'});
     model.material('mat1').propertyGroup('def').func('an1').set('argunit', '1,1,1');
     model.material('mat1').propertyGroup('def').func('an1').set('plotargs', {'x' '0' '10'; 'y' '0' '10'; 'z' '0' '10'});
-    model.material('mat1').propertyGroup('def').set('electricconductivity', {'an1(ACe,x,y,z)'});
+    model.material('mat1').propertyGroup('def').set('electricconductivity', {'an1(x,y,z)'});
     
     model.component('comp1').physics.create('hzeq', 'HelmholtzEquation', 'geom1');
     model.component('comp1').physics('hzeq').field('dimensionless').field('B');
     model.component('comp1').physics('hzeq').prop('Units').set('DependentVariableQuantity', 'magneticfluxdensity');
     model.component('comp1').physics('hzeq').prop('Units').set('SourceTermQuantity', 'currentdensity');
     model.component('comp1').physics('hzeq').feature('heq1').set('c', -1);
-    model.component('comp1').physics('hzeq').feature('heq1').set('a', 'if(dom==1,-mu*0.05i*mat1.def.an1(x,y,z),if((dom==2),ACg,ACo))');
+    model.component('comp1').physics('hzeq').feature('heq1').set('a', 'if(dom==1,mu*w*i*mat1.def.an1(x,y,z),if((dom==2),ACg,ACo))');
     model.component('comp1').physics('hzeq').feature('heq1').set('f', 1);
     model.component('comp1').physics('hzeq').feature('init1').set('B', 'if((dom==1||dom==2),0,1)');
     model.component('comp1').physics('hzeq').feature('init1').set('Bt', 'if((dom==1||dom==2),0,0)');
@@ -178,13 +178,29 @@ for num_config = 1:number_generated_data
     model.result.dataset('cln1').set('genpoints', {'3' '3' '3'; 'x_goal' 'y_goal' 'z_goal'});
     
     model.result.create('pg1', 'PlotGroup3D');
-    % model.result('pg1').create('vol1', 'Volume');
-    % model.result('pg1').feature('vol1').set('smooth', 'internal');
-    % model.result('pg1').feature('vol1').set('resolution', 'normal');
-    model.result('pg1').create('mslc1', 'Multislice');
-    model.result('pg1').feature('mslc1').set('xnumber', '5');
-    model.result('pg1').feature('mslc1').set('ynumber', '5');
-    model.result('pg1').feature('mslc1').set('znumber', '5');
+    
+%     model.result('pg1').create('mfm', 'Volume');
+%     model.result('pg1').feature('mfm').set('smooth', 'internal');
+%     model.result('pg1').feature('mfm').set('resolution', 'normal');
+%     model.result('pg1').feature('mfm').set('resolution', 'custom');
+%     model.result('pg1').feature('mfm').set('refine', 5);
+    
+%     model.result('pg1').create('mslc1', 'Multislice');
+%     model.result('pg1').feature('mslc1').set('xcoord', 'range(0,0.1,10)');
+%     model.result('pg1').feature('mslc1').set('ycoord', 'range(0,0.1,10)');
+%     model.result('pg1').feature('mslc1').set('zcoord', 'range(0,0.1,10)');
+ 
+    model.result('pg1').create('scv1', 'ScatterVolume');
+    model.result('pg1').feature('scv1').set('expr', {'x' 'y' 'z'});
+    model.result('pg1').feature('scv1').set('arrowxmethod', 'coord');
+    model.result('pg1').feature('scv1').set('xcoord', 'range(0,0.1,10)');
+    model.result('pg1').feature('scv1').set('arrowymethod', 'coord');
+    model.result('pg1').feature('scv1').set('ycoord', 'range(0,0.1,10)');
+    model.result('pg1').feature('scv1').set('arrowzmethod', 'coord');
+    model.result('pg1').feature('scv1').set('zcoord', 'range(0,0.1,10)');
+    model.result('pg1').feature('scv1').set('sphereradiusscaleactive', true);
+    model.result('pg1').feature('scv1').set('sphereradiusscale', 0.1);
+
     model.result('pg1').create('str1', 'Streamline');
     model.result('pg1').feature('str1').set('posmethod', 'magnitude');
     model.result('pg1').feature('str1').set('madv', 'manual');
@@ -238,8 +254,10 @@ for num_config = 1:number_generated_data
     model.result.export.create('plot2', 'Plot');
     model.result.export.create('plot3', 'Plot');
     model.result.export('plot1').set('plot', 'str1');
-    % model.result.export('plot2').set('plot', 'vol1');
-    model.result.export('plot2').set('plot', 'mslc1');
+%     model.result.export('plot2').set('plot', 'mfm');
+%     model.result.export('plot2').set('plot', 'mslc1');
+    model.result.export('plot2').set('plot', 'scv1');
+    model.result.export('plot2').set('sort', true);
     model.result.export('plot3').set('plot', 'arwv1');
     model.result.export('plot1').set('filename', strcat(data_path, 'streamline_C'...
         ,num2str(num_config),'.txt'));
@@ -249,8 +267,8 @@ for num_config = 1:number_generated_data
         ,num2str(num_config),'.txt'));
     
     % model.result.export('plot1').run;
-    % model.result.export('plot2').run;
-    model.result.export('plot3').run;
+    model.result.export('plot2').run;
+    % model.result.export('plot3').run;
     mphsave(model,'deep_planning_3d.mph');
 end
 
