@@ -1,0 +1,6 @@
+comsol_data:
+  data_path: "./data_comsol/data/"
+  output_path: "./data_comsol/data/numpy_data"
+  sigmae: 100
+  sigmao: 0 
+  sigmag: 1000000

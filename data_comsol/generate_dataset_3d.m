@@ -4,7 +4,7 @@ import com.comsol.model.util.*
 
 model_path = './';
 data_path = './data/';
-number_generated_data = 1;
+number_generated_data = 10;
 
 for num_config = 1:number_generated_data
     tic
