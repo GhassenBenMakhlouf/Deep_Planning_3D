@@ -20,7 +20,6 @@ class DP3dDataset(Sequence):
         batch_y = []
         for filename in batch_filenames:
             array = np.load(filename)
-            batch_x.append(array[:, :, :, :2])
-            batch_y.append(array[:, :, :, :2:])
-
+            batch_x.append(array[:, :, :, :1])
+            batch_y.append(array[:, :, :, 1:])
         return np.array(batch_x), np.array(batch_y)

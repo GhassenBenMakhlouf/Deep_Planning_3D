@@ -1,9 +1,8 @@
 from pathlib import Path
+from tqdm import tqdm
 import pandas as pd
 import numpy as np
-import cmath, math
-import timeit
-
+import math
 import numba
 
 
@@ -38,10 +37,10 @@ def preprocess_data(config):
     sigmag = cfg.sigmag
     sigmao = cfg.sigmao
 
-    point_precision = 1 / 10
+    # point_precision = 1 / 10
 
     data_files = [x.name for x in sorted(data_path.glob("magneticfield_*.txt"))]
-    for data_file in data_files:
+    for data_file in tqdm(data_files):
         # set paths
         mf_path = data_path / data_file
         scene_file = data_file.replace("magneticfield_C", "scene_")
@@ -80,13 +79,13 @@ def preprocess_data(config):
                 return sigmae / d
 
         ######################## add distance to goal information #####################
-        print("add distance to goal information")
+        # print("add distance to goal information")
         data["Distance"] = Compute_distance_fn(
             data.X.values, data.Y.values, data.Z.values
         )
 
         ######################## add conductivity information #########################
-        print("add conductivity information")
+        # print("add conductivity information")
         data["conductivity"] = Compute_conductivity_fn(
             data.X.values, data.Y.values, data.Z.values, data.Distance.values
         )
