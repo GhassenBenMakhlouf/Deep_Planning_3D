@@ -1,5 +1,7 @@
 # Deep_Planning_3D
 
+Use requirements.txt to install the needed packages (Python 3.9 was used)
+
 ### Data Generation
 * Install Matlab
 * Install comsol with the option livelink for Matlab
@@ -24,7 +26,6 @@ Use config.yaml("comsol_data" dictionary) to set the paths of the Comsol output 
 Use config.yaml("comsol_data" dictionary) also to set the conductivities of the environment, obstacles and goal respectively.
 
 ### Train the 3D CNN
-* Use requirements.txt to install the needed packages
 * Use config.yaml("learning" dictionary) to set the paths of the numpy data for train, val and test and the batch size.
 * Use config.yaml("learning" dictionary) also to set the maximum number of epochs. The script uses an early stopping with patience 100 epochs.
 * The model checkpoints will be saved in folder "checkpoints"
