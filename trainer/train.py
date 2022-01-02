@@ -51,16 +51,16 @@ def train_cnn_3d(config):
     model.compile(optimizer="adam", loss=tf.keras.losses.MeanSquaredLogarithmicError())
     print("#parameters:", model.count_params())
 
-    x = tf.ones((2, 101, 101, 101))
+    # x = tf.ones((2, 101, 101, 101))
 
-    t = time.time()
-    # y = model(tf.expand_dims(X[0], axis=0))
-    y = model(x)
-    elapsed = time.time() - t
-    print(elapsed, "s to run forward pass")
-    print(y.shape)
+    # t = time.time()
+    # # y = model(tf.expand_dims(X[0], axis=0))
+    # y = model(x)
+    # elapsed = time.time() - t
+    # print(elapsed, "s to run forward pass")
+    # print(y.shape)
 
-    model.summary()
+    # model.summary()
 
     early_stopping = EarlyStopping(
         monitor="val_loss", patience=100, restore_best_weights=True
