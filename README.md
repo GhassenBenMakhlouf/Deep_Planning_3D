@@ -14,25 +14,22 @@
 * Run the Matlab script "generate_dataset_3d.m"
 
 ### Preprocess Data
-The Python script "preprocess_data.py" transforms the simulated data from Comsol to Numpy Matrices
-Each output matrix is a 101x101x101x4 Matrix (4 channels), where:
-* channel 1 --> data distance to the goal
-* channel 2 --> data conductivity
-* channel 3 --> data labels: angles between x and y axes of the ground truth EMF gradients
-* channel 4 --> data labels: angles between the xy plan and z axis of the ground truth EMF gradients
+The Python function "preprocess_data" transforms the simulated data from Comsol to Numpy Matrices
+Each output matrix is a 101x101x101x2 Matrix (2 channels), where:
+* channel 1 --> data conductivity
+* channel 2 --> data labels: the ground truth EMF magnitudes
 
-Use lines 12, 13 and 14 to set the paths of the Comsol output data for train, val and test.
+Use config.yaml("comsol_data" dictionary) to set the paths of the Comsol output data for train, val and test.
 
-Use lines 25, 27 and 29 to set the conductivities of the environment, obstacles and goal respectively.
-
-PS: The Python script "preprocess_data.py" was written in Tensorflow 1.15 and not yet updated to 2.7.
+Use config.yaml("comsol_data" dictionary) also to set the conductivities of the environment, obstacles and goal respectively.
 
 ### Train the 3D CNN
-* Use requirements.txt to install the needed packages to use the "train.py" Python script
-* Use lines 20, 21 and 22 to set the paths of the numpy data for train, val and test.
-* Use line 23 to set the batch size
-* Use line 24 to set the maximum number of epochs. The script uses an early stopping with patience 100 epochs.
+* Use requirements.txt to install the needed packages
+* Use config.yaml("learning" dictionary) to set the paths of the numpy data for train, val and test and the batch size.
+* Use config.yaml("learning" dictionary) also to set the maximum number of epochs. The script uses an early stopping with patience 100 epochs.
 * The model checkpoints will be saved in folder "checkpoints"
 * The training logs can be displayed using Tensorboard and the folder "logs/fit"
-* The Python script "cnn_3d.py" defines the architecture of the used 3D CNN. 
+* The Python script "cnn_3d.py" defines the architecture of the used 3D CNN. It provides two functions 
+"build_cnn_3d" and "build_cnn_3d_cheap", which is the same architecture with cheaper computation. 
+Set the variable "cheap" in config.yaml("learning" dictionary) to True to use the cheaper network.  
 
