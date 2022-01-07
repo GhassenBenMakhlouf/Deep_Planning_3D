@@ -4,7 +4,7 @@ import com.comsol.model.util.*
 
 model_path = './';
 data_path = './data/';
-number_generated_data = 10;
+number_generated_data = 1500;
 
 for num_config = 1:number_generated_data
     tic
@@ -201,75 +201,78 @@ for num_config = 1:number_generated_data
     model.result('pg1').feature('scv1').set('sphereradiusscaleactive', true);
     model.result('pg1').feature('scv1').set('sphereradiusscale', 0.1);
 
-    model.result('pg1').create('str1', 'Streamline');
-    model.result('pg1').feature('str1').set('posmethod', 'magnitude');
-    model.result('pg1').feature('str1').set('madv', 'manual');
-    model.result('pg1').feature('str1').set('smooth', 'internal');
-    model.result('pg1').feature('str1').set('resolution', 'normal');
-    model.result('pg1').feature('str1').set('color', 'black');
-    model.result('pg1').create('arwv1', 'ArrowVolume');
-    model.result('pg1').feature('arwv1').set('xcoord', 'range(0,0.1,10)');
-    model.result('pg1').feature('arwv1').set('ycoord', 'range(0,0.1,10)');
-    model.result('pg1').feature('arwv1').set('zcoord', 'range(0,0.1,10)');
-    model.result('pg1').feature('arwv1').set('scaleactive', true);
-    model.result('pg1').feature('arwv1').set('scale', '0.00005');
+%     model.result('pg1').create('str1', 'Streamline');
+%     model.result('pg1').feature('str1').set('posmethod', 'magnitude');
+%     model.result('pg1').feature('str1').set('madv', 'manual');
+%     model.result('pg1').feature('str1').set('smooth', 'internal');
+%     model.result('pg1').feature('str1').set('resolution', 'normal');
+%     model.result('pg1').feature('str1').set('color', 'black');
+%     model.result('pg1').create('arwv1', 'ArrowVolume');
+%     model.result('pg1').feature('arwv1').set('xcoord', 'range(0,0.1,10)');
+%     model.result('pg1').feature('arwv1').set('ycoord', 'range(0,0.1,10)');
+%     model.result('pg1').feature('arwv1').set('zcoord', 'range(0,0.1,10)');
+%     model.result('pg1').feature('arwv1').set('scaleactive', true);
+%     model.result('pg1').feature('arwv1').set('scale', '0.00005');
+%     
+%     model.result.create('pg2', 'PlotGroup3D');
+%     model.result('pg2').create('vol1', 'Volume');
+%     model.result('pg2').set('data', 'none');
+%     model.result('pg2').set('titletype', 'manual');
+%     model.result('pg2').set('title', 'an1(x,y,z)');
+%     model.result('pg2').set('edges', false);
+%     model.result('pg2').feature('vol1').set('data', 'an1_ds2');
+%     model.result('pg2').feature('vol1').set('solrepresentation', 'solnum');
+%     model.result('pg2').feature('vol1').set('expr', 'mat1.def.an1(root.x[1],root.y[1],root.z[1])');
+%     model.result('pg2').feature('vol1').set('unit', '');
+%     model.result('pg2').feature('vol1').set('descractive', true);
+%     model.result('pg2').feature('vol1').set('descr', 'conductivity(x,y)');
+%     model.result('pg2').feature('vol1').set('titletype', 'custom');
+%     model.result('pg2').feature('vol1').set('typeintitle', false);
+%     model.result('pg2').feature('vol1').set('unitintitle', false);
+%     model.result('pg2').feature('vol1').set('rangecoloractive', true);
+%     model.result('pg2').feature('vol1').set('rangecolormin', 15.713484026367723);
+%     model.result('pg2').feature('vol1').set('rangecolormax', 200);
+%     model.result('pg2').feature('vol1').set('rangedataactive', true);
+%     model.result('pg2').feature('vol1').set('rangedatamin', 0);
+%     model.result('pg2').feature('vol1').set('rangedatamax', 14000);
+%     model.result('pg2').feature('vol1').set('smooth', 'none');
+%     model.result('pg2').feature('vol1').set('allowmaterialsmoothing', false);
+%     model.result('pg2').feature('vol1').set('resolution', 'normal');
+%     
+%     model.result.create('pg3', 'PlotGroup1D');
+%     model.result('pg3').create('lngr1', 'LineGraph');
+%     model.result('pg3').set('data', 'cln1');
+%     model.result('pg3').set('xlabel', 'Arc length');
+%     model.result('pg3').set('ylabel', 'Dependent variable B (T)');
+%     model.result('pg3').set('window', 'window1');
+%     model.result('pg3').set('windowtitle', 'Plot 1');
+%     model.result('pg3').set('xlabelactive', false);
+%     model.result('pg3').set('ylabelactive', false);
+%     model.result('pg3').feature('lngr1').set('smooth', 'internal');
+%     model.result('pg3').feature('lngr1').set('resolution', 'normal');
     
-    model.result.create('pg2', 'PlotGroup3D');
-    model.result('pg2').create('vol1', 'Volume');
-    model.result('pg2').set('data', 'none');
-    model.result('pg2').set('titletype', 'manual');
-    model.result('pg2').set('title', 'an1(x,y,z)');
-    model.result('pg2').set('edges', false);
-    model.result('pg2').feature('vol1').set('data', 'an1_ds2');
-    model.result('pg2').feature('vol1').set('solrepresentation', 'solnum');
-    model.result('pg2').feature('vol1').set('expr', 'mat1.def.an1(root.x[1],root.y[1],root.z[1])');
-    model.result('pg2').feature('vol1').set('unit', '');
-    model.result('pg2').feature('vol1').set('descractive', true);
-    model.result('pg2').feature('vol1').set('descr', 'conductivity(x,y)');
-    model.result('pg2').feature('vol1').set('titletype', 'custom');
-    model.result('pg2').feature('vol1').set('typeintitle', false);
-    model.result('pg2').feature('vol1').set('unitintitle', false);
-    model.result('pg2').feature('vol1').set('rangecoloractive', true);
-    model.result('pg2').feature('vol1').set('rangecolormin', 15.713484026367723);
-    model.result('pg2').feature('vol1').set('rangecolormax', 200);
-    model.result('pg2').feature('vol1').set('rangedataactive', true);
-    model.result('pg2').feature('vol1').set('rangedatamin', 0);
-    model.result('pg2').feature('vol1').set('rangedatamax', 14000);
-    model.result('pg2').feature('vol1').set('smooth', 'none');
-    model.result('pg2').feature('vol1').set('allowmaterialsmoothing', false);
-    model.result('pg2').feature('vol1').set('resolution', 'normal');
-    
-    model.result.create('pg3', 'PlotGroup1D');
-    model.result('pg3').create('lngr1', 'LineGraph');
-    model.result('pg3').set('data', 'cln1');
-    model.result('pg3').set('xlabel', 'Arc length');
-    model.result('pg3').set('ylabel', 'Dependent variable B (T)');
-    model.result('pg3').set('window', 'window1');
-    model.result('pg3').set('windowtitle', 'Plot 1');
-    model.result('pg3').set('xlabelactive', false);
-    model.result('pg3').set('ylabelactive', false);
-    model.result('pg3').feature('lngr1').set('smooth', 'internal');
-    model.result('pg3').feature('lngr1').set('resolution', 'normal');
-    model.result.export.create('plot1', 'Plot');
+%     model.result.export.create('plot1', 'Plot');
+%     model.result.export('plot1').set('plot', 'str1');
+%     model.result.export('plot1').set('filename', strcat(data_path, 'streamline_C'...
+%         ,num2str(num_config),'.txt'));
+
     model.result.export.create('plot2', 'Plot');
-    model.result.export.create('plot3', 'Plot');
-    model.result.export('plot1').set('plot', 'str1');
 %     model.result.export('plot2').set('plot', 'mfm');
 %     model.result.export('plot2').set('plot', 'mslc1');
     model.result.export('plot2').set('plot', 'scv1');
     model.result.export('plot2').set('sort', true);
-    model.result.export('plot3').set('plot', 'arwv1');
-    model.result.export('plot1').set('filename', strcat(data_path, 'streamline_C'...
-        ,num2str(num_config),'.txt'));
     model.result.export('plot2').set('filename', strcat(data_path, 'magneticfield_C'...
         ,num2str(num_config),'.txt'));
-    model.result.export('plot3').set('filename', strcat(data_path, 'gradient_C'...
-        ,num2str(num_config),'.txt'));
+    
+%     model.result.export.create('plot3', 'Plot');
+%     model.result.export('plot3').set('plot', 'arwv1');
+%     model.result.export('plot3').set('filename', strcat(data_path, 'gradient_C'...
+%         ,num2str(num_config),'.txt'));
     
     % model.result.export('plot1').run;
     model.result.export('plot2').run;
     % model.result.export('plot3').run;
-    mphsave(model,'deep_planning_3d.mph');
+    % mphsave(model,'deep_planning_3d.mph');
 end
 
 

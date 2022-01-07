@@ -28,6 +28,20 @@ def get_goal(filepath):
     return goal
 
 
+def Normalize_minmax_fn(x):
+    """normalize values of x between 0 and 1000"""
+    min = np.amin(x)
+    max = np.amax(x)
+    return np.multiply(1000, np.divide(np.subtract(x, min), np.subtract(max, min)))
+
+
+def Normalize_log_minmax_fn(x):
+    """normalize values of x between 0 and 1000"""
+    # min = np.amin(x)
+    max = np.amax(x)
+    return np.multiply(1000, np.divide(np.log10(x), np.log10(max)))
+
+
 def preprocess_data(config):
     cfg = config.comsol_data
 
@@ -40,6 +54,7 @@ def preprocess_data(config):
     # point_precision = 1 / 10
 
     data_files = [x.name for x in sorted(data_path.glob("magneticfield_*.txt"))]
+
     for data_file in tqdm(data_files):
         # set paths
         mf_path = data_path / data_file
@@ -56,6 +71,14 @@ def preprocess_data(config):
             comment="%",
             header=None,
             names=["X", "Y", "Z", "Radius", "Color"],
+            low_memory=False, 
+            # dtype={
+            #     "X": np.float64,
+            #     "Y": np.float64,
+            #     "Z": np.float64,
+            #     "Radius": np.int64,
+            #     "Color": np.float64,
+            # },
         )
         data.X = data.X.round(decimals=1)
         data.Y = data.Y.round(decimals=1)
@@ -86,6 +109,7 @@ def preprocess_data(config):
 
         ######################## add conductivity information #########################
         # print("add conductivity information")
+
         data["conductivity"] = Compute_conductivity_fn(
             data.X.values, data.Y.values, data.Z.values, data.Distance.values
         )
@@ -117,19 +141,35 @@ def preprocess_data(config):
             .to_numpy()
             .reshape(data.X.nunique(), data.Y.nunique(), -1)
         )
+        assert (
+            np.nanmin(data_conductivity) > 0
+        ), f"there are negative conductivity values in {data_file}"
         data_conductivity[np.isnan(data_conductivity)] = sigmao
+        data_conductivity = Normalize_minmax_fn(data_conductivity)
+        assert (data_conductivity >= 0).all() and (
+            data_conductivity <= 1000
+        ).all(), f"There are normalized conductivity values in {data_file} not between 0 and 1000 or nan."
 
         data_labels = (
             data.pivot(index="X", columns=["Y", "Z"], values="Color")
             .to_numpy()
             .reshape(data.X.nunique(), data.Y.nunique(), -1)
         )
-        data_labels[np.isnan(data_labels)] = 0
+        obstacle_label = 0
+        if not np.nanmin(data_labels) > 0:
+            obstacle_label = np.nanmin(data_labels)
+        data_labels[np.isnan(data_labels)] = obstacle_label
+        data_labels = Normalize_minmax_fn(data_labels)
+        assert (data_labels >= 0).all() and (
+            data_labels <= 1000
+        ).all(), f"There are normalized MF values in {data_file} not between 0 and 1000"
 
         ######################## Build data matrix (101x101x101x2) ###########################
-        data_matrix = np.stack(
-            (data_conductivity, data_labels),
-            axis=3,
-        )
+        data_matrix = (
+            np.stack(
+                (data_conductivity, data_labels),
+                axis=3,
+            )
+        ).astype(np.float32)
 
         np.save(numpy_file_path, data_matrix)

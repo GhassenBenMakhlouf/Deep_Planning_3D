@@ -1,5 +1,4 @@
-from keras.callbacks import ReduceLROnPlateau
-from keras.callbacks import EarlyStopping
+from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from data import DP3dDataset
 from models import build_cnn_3d, build_cnn_3d_cheap
 import tensorflow as tf
@@ -27,43 +26,46 @@ def train_cnn_3d(config):
         pass
     train_dataset = DP3dDataset(dataset_path=train_path, batch_size=batch_size)
     val_dataset = DP3dDataset(dataset_path=val_path, batch_size=batch_size)
-    test_dataset = DP3dDataset(dataset_path=test_path, batch_size=batch_size)
+    # test_dataset = DP3dDataset(dataset_path=test_path, batch_size=batch_size)
     input_shape = train_dataset[0][0].shape[1:]
 
     print("input_shape: ", input_shape)
 
     print(
-        "(trainsize, valsize, testsize) =",
+        "(trainsize, valsize) =",
         len(train_dataset),
         " ",
         len(val_dataset),
         " ",
-        len(test_dataset),
     )
 
     if cfg.cheap:
-        model = build_cnn_3d_cheap(input_shape=input_shape)
+        model = build_cnn_3d_cheap(input_shape=input_shape, kernel_regularizer=tf.keras.regularizers.l2(l=0.1))
     else:
-        model = build_cnn_3d(input_shape=input_shape)
+        model = build_cnn_3d(input_shape=input_shape, kernel_regularizer=tf.keras.regularizers.l2(l=0.1))
     # model.build((None, 101, 101, 101, 2))
     # print('#parameters:', model.count_params()/1e6, 'm')
 
     model.compile(optimizer="adam", loss=tf.keras.losses.MeanSquaredLogarithmicError())
     print("#parameters:", model.count_params())
 
-    # x = tf.ones((2, 101, 101, 101))
+    x = tf.ones(train_dataset[0][0].shape)
+    print("input",x.shape)
+    print("label", train_dataset[0][1].shape)
 
-    # t = time.time()
+    t = time.time()
     # # y = model(tf.expand_dims(X[0], axis=0))
-    # y = model(x)
-    # elapsed = time.time() - t
-    # print(elapsed, "s to run forward pass")
-    # print(y.shape)
+    y = model(x)
+    elapsed = time.time() - t
+    print(elapsed, "s to run forward pass")
+    print("output", y.shape)
+    
+    assert y.shape==train_dataset[0][1].shape, "output shape and label shape are not the same"
 
     # model.summary()
 
     early_stopping = EarlyStopping(
-        monitor="val_loss", patience=100, restore_best_weights=True
+        monitor="val_loss", patience=50, restore_best_weights=True
     )
     reduce_lr = ReduceLROnPlateau(
         monitor="val_loss", factor=0.75, patience=20, min_lr=0.00003
@@ -105,3 +107,6 @@ def train_cnn_3d(config):
         callbacks=callbacks,
         verbose=3,
     )
+    
+    model.save_weights("checkpoints/" + date_time + "/cp-final.ckpt")
+    model.save("checkpoints/" + date_time + "/final.h5")

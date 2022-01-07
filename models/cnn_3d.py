@@ -2,7 +2,7 @@ from keras.models import Sequential
 from keras.layers import Dropout, Conv3D, BatchNormalization, MaxPool3D, Conv3DTranspose
 
 
-def build_cnn_3d(input_shape):
+def build_cnn_3d(input_shape, kernel_regularizer=None):
     model = Sequential()
     # encoder
 
@@ -14,6 +14,7 @@ def build_cnn_3d(input_shape):
             padding="same",
             activation="relu",
             input_shape=input_shape,
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
@@ -27,6 +28,7 @@ def build_cnn_3d(input_shape):
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
@@ -40,6 +42,7 @@ def build_cnn_3d(input_shape):
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
@@ -53,6 +56,7 @@ def build_cnn_3d(input_shape):
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
@@ -66,6 +70,7 @@ def build_cnn_3d(input_shape):
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
@@ -82,6 +87,7 @@ def build_cnn_3d(input_shape):
             strides=(2, 2, 2),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -95,6 +101,7 @@ def build_cnn_3d(input_shape):
             strides=(2, 2, 2),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -108,6 +115,7 @@ def build_cnn_3d(input_shape):
             strides=(2, 2, 2),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -121,6 +129,7 @@ def build_cnn_3d(input_shape):
             strides=(1, 1, 1),
             padding="valid",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -134,6 +143,7 @@ def build_cnn_3d(input_shape):
             strides=(1, 1, 1),
             padding="valid",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -147,6 +157,7 @@ def build_cnn_3d(input_shape):
             strides=(2, 2, 2),
             padding="valid",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -155,18 +166,19 @@ def build_cnn_3d(input_shape):
 
     model.add(
         Conv3D(
-            filters=2,
+            filters=1,
             kernel_size=1,
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
 
     return model
 
 
-def build_cnn_3d_cheap(input_shape):
+def build_cnn_3d_cheap(input_shape, kernel_regularizer=None):
     model = Sequential()
     # encoder
 
@@ -178,13 +190,14 @@ def build_cnn_3d_cheap(input_shape):
             padding="same",
             activation="relu",
             input_shape=input_shape,
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
     model.add(BatchNormalization())
     model.add(Dropout(0.1))
     # the scene is now 51x51x51
-    model.add(Conv3D(filters=16, kernel_size=7, strides=(1, 1, 1), padding="same"))
+    model.add(Conv3D(filters=16, kernel_size=7, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer))
     model.add(
         Conv3D(
             filters=32,
@@ -192,13 +205,14 @@ def build_cnn_3d_cheap(input_shape):
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
     model.add(BatchNormalization())
     model.add(Dropout(0.1))
     # the scene is now 26x26x26
-    model.add(Conv3D(filters=32, kernel_size=5, strides=(1, 1, 1), padding="same"))
+    model.add(Conv3D(filters=32, kernel_size=5, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer))
     model.add(
         Conv3D(
             filters=64,
@@ -206,13 +220,14 @@ def build_cnn_3d_cheap(input_shape):
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
     model.add(BatchNormalization())
     model.add(Dropout(0.1))
     # the scene is now 13x13x13
-    model.add(Conv3D(filters=64, kernel_size=3, strides=(1, 1, 1), padding="same"))
+    model.add(Conv3D(filters=64, kernel_size=3, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer))
     model.add(
         Conv3D(
             filters=128,
@@ -220,13 +235,14 @@ def build_cnn_3d_cheap(input_shape):
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
     model.add(BatchNormalization())
     model.add(Dropout(0.1))
     # the scene is now 7x7x7
-    model.add(Conv3D(filters=128, kernel_size=3, strides=(1, 1, 1), padding="same"))
+    model.add(Conv3D(filters=128, kernel_size=3, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer))
     model.add(
         Conv3D(
             filters=256,
@@ -234,6 +250,7 @@ def build_cnn_3d_cheap(input_shape):
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(MaxPool3D(pool_size=(1, 1, 1), strides=(2, 2, 2), padding="same"))
@@ -250,6 +267,7 @@ def build_cnn_3d_cheap(input_shape):
             strides=(2, 2, 2),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -257,7 +275,7 @@ def build_cnn_3d_cheap(input_shape):
     # the scene is now 8x8x8
 
     model.add(
-        Conv3DTranspose(filters=128, kernel_size=1, strides=(1, 1, 1), padding="same")
+        Conv3DTranspose(filters=128, kernel_size=1, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer)
     )
     model.add(
         Conv3DTranspose(
@@ -266,6 +284,7 @@ def build_cnn_3d_cheap(input_shape):
             strides=(2, 2, 2),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -273,7 +292,7 @@ def build_cnn_3d_cheap(input_shape):
     # the scene is now 16x16x16
 
     model.add(
-        Conv3DTranspose(filters=64, kernel_size=1, strides=(1, 1, 1), padding="same")
+        Conv3DTranspose(filters=64, kernel_size=1, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer)
     )
     model.add(
         Conv3DTranspose(
@@ -282,6 +301,7 @@ def build_cnn_3d_cheap(input_shape):
             strides=(2, 2, 2),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -289,7 +309,7 @@ def build_cnn_3d_cheap(input_shape):
     # the scene is now 32x32x32
 
     model.add(
-        Conv3DTranspose(filters=32, kernel_size=1, strides=(1, 1, 1), padding="same")
+        Conv3DTranspose(filters=32, kernel_size=1, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer)
     )
     model.add(
         Conv3DTranspose(
@@ -298,6 +318,7 @@ def build_cnn_3d_cheap(input_shape):
             strides=(1, 1, 1),
             padding="valid",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -305,7 +326,7 @@ def build_cnn_3d_cheap(input_shape):
     # the scene is now 38x38x38
 
     model.add(
-        Conv3DTranspose(filters=16, kernel_size=1, strides=(1, 1, 1), padding="same")
+        Conv3DTranspose(filters=16, kernel_size=1, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer)
     )
     model.add(
         Conv3DTranspose(
@@ -314,6 +335,7 @@ def build_cnn_3d_cheap(input_shape):
             strides=(1, 1, 1),
             padding="valid",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -321,7 +343,7 @@ def build_cnn_3d_cheap(input_shape):
     # the scene is now 46x46x46
 
     model.add(
-        Conv3DTranspose(filters=8, kernel_size=1, strides=(1, 1, 1), padding="same")
+        Conv3DTranspose(filters=8, kernel_size=1, strides=(1, 1, 1), padding="same", kernel_regularizer=kernel_regularizer)
     )
     model.add(
         Conv3DTranspose(
@@ -330,6 +352,7 @@ def build_cnn_3d_cheap(input_shape):
             strides=(2, 2, 2),
             padding="valid",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
     model.add(BatchNormalization())
@@ -338,11 +361,12 @@ def build_cnn_3d_cheap(input_shape):
 
     model.add(
         Conv3D(
-            filters=2,
+            filters=1,
             kernel_size=1,
             strides=(1, 1, 1),
             padding="same",
             activation="relu",
+            kernel_regularizer=kernel_regularizer,
         )
     )
 
