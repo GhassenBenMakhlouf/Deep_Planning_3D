@@ -132,5 +132,5 @@ dmypy.json
 .vscode
 
 # project specific
-data_comsol/data/
-logs/
+data_&_cnn/data_comsol/data/
+data_&_cnn/logs/

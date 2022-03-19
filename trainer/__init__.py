@@ -1,1 +1,0 @@
-from .train import train_cnn_3d
