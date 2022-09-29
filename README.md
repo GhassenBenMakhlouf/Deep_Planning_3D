@@ -1,6 +1,9 @@
 # Deep_Planning_3D
+<p align="center">
+  <img src="./images/title.png" alt="drawing" width="65%"/>
+</p>
 
-### 1) Data Generation
+## 1) Data Generation
 * magnetic field easily simulated 
 * large dataset of 3D: conductivity maps and corresponding 3D magnetic field distributions
 * 2 data generation steps: 
@@ -38,7 +41,7 @@ solve Helmholtz differential equation:
   <img src="./images/fig1.png" alt="drawing" width="70%"/>
 </p>
 
-### 2) Data Preprocessing
+## 2) Data Preprocessing
 
 The aim of this step is to prepare the output of the finite element simulation to be the input of the network. 
 For each generated sample, the output of the simulation consists of scene information and the magnetic field magnitudes, saved as text files. 
@@ -60,7 +63,7 @@ positions were set to 0, if all the labels were positive and to the minimum of a
   <img src="./images/fig2.png" alt="drawing" width="70%"/>
 </p>
 
-### 3) CNN Training
+## 3) CNN Training
 * neural network: supervised pixel-wise regression model 
 * Input: conductivity data 
 * Output: magnetic distributions 
@@ -82,7 +85,7 @@ positions were set to 0, if all the labels were positive and to the minimum of a
   <img src="./images/fig3.png" alt="drawing" width="50%"/>
 </p>
 
-### 4) Path Planning
+## 4) Path Planning
 * in-the-loop
 * each iteration:
   - 3D point cloud of the obstacles
@@ -100,7 +103,7 @@ positions were set to 0, if all the labels were positive and to the minimum of a
 </p>
 
 
-### 5) Experiments
+## 5) Experiments
 Random experiments were generated with 4 different types.
 The environment size, the obstacles' and goal's positions are randomly selected based on the experiment type.
 <p align="center">
